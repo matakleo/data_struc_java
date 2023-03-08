@@ -93,6 +93,36 @@ public class Model extends Observable {
         checkGameOver();
         setChanged();
     }
+    public int CheckTheSameNum(Board board,int col,int row) {
+
+        for(int r=row+1;r<board.size();r+=1){
+            if(board.tile(col,r)==board.tile(col,row)){
+                return r;
+
+            }
+        }
+        return -1;
+
+        }
+
+    public int CheckTheNull(Board board,int col,int row) {
+
+        int row_of_null=-1;
+
+        for(int r=row+1;r<board.size();r+=1){
+            if(board.tile(col,r)==null){
+                row_of_null=r;
+
+
+            }
+        }
+        return row_of_null;
+
+    }
+
+
+
+
 
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
@@ -109,10 +139,65 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
+        int null_row;
+        int same_num_row;
 
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+
+
+        for (int c =0; c<board.size();c+=1){
+            for (int r = board.size()-1; r>=0;r-=1){
+                null_row=CheckTheNull(board,c,r);
+                System.out.println("col is "+c+" row is "+r);
+                same_num_row=CheckTheSameNum(board,c,r);
+                Tile t = board.tile(c,r);
+                if (same_num_row>r){
+                    board.move(c,same_num_row,t);
+                    changed=true;
+
+                }
+                else if (null_row>r){
+                    board.move(c,null_row,t);
+                    changed=true;
+                }
+
+                }
+            }
+//
+//
+//
+//
+//                if (board.tile(c,r)!=null){
+////                    System.out.println("col "+c+" row "+r+t);
+////                    System.out.println("want to move it to col "+c+" row "+(r+1));
+//
+//                    if (r==2) {
+//
+//
+//                        if (board.tile(c,r+1)==null || board.tile(c,r+1)==board.tile(c,r)){
+//                            board.move(c,r+1,t);
+//                            changed=true;
+//
+//                        }
+//
+//                    }
+//
+//
+//                }
+////                if (r==2){
+////                    if (board.tile(c,r+1)==null){
+////                        board.move(c,r,t);
+////                        changed=true;
+////                        score += 7;
+////
+////                }
+////
+////
+////                }
+//            }
+//        }
 
         checkGameOver();
         if (changed) {
