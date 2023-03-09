@@ -96,10 +96,21 @@ public class Model extends Observable {
     public int CheckTheSameNum(Board board,int col,int row) {
 
         for(int r=row+1;r<board.size();r+=1){
-            if(board.tile(col,r)==board.tile(col,row)){
-                return r;
+
+
+//            System.out.println("col ,r tile is "+board.tile(col,r)+" ||| col ,row tile is "+board.tile(col,row));
+            if (board.tile(col,r)!=null){
+
+                if(board.tile(col,r).value()==board.tile(col,row).value()){
+//                    System.out.println("found same tile on row "+r);
+//                    System.out.println("moving "+board.tile(col,row)+" to "+board.tile(col,r));
+                    return r;
+
+                }
 
             }
+
+
         }
         return -1;
 
@@ -111,6 +122,8 @@ public class Model extends Observable {
 
         for(int r=row+1;r<board.size();r+=1){
             if(board.tile(col,r)==null){
+//                System.out.println("moving "+board.tile(col,row)+" to col "+col+ " row "+r+"where it's " +board.tile(col,r));
+
                 row_of_null=r;
 
 
@@ -141,6 +154,7 @@ public class Model extends Observable {
         changed = false;
         int null_row;
         int same_num_row;
+        int row_taken = -1;
 
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
@@ -148,20 +162,34 @@ public class Model extends Observable {
 
 
         for (int c =0; c<board.size();c+=1){
-            for (int r = board.size()-1; r>=0;r-=1){
-                null_row=CheckTheNull(board,c,r);
-                System.out.println("col is "+c+" row is "+r);
-                same_num_row=CheckTheSameNum(board,c,r);
-                Tile t = board.tile(c,r);
-                if (same_num_row>r){
-                    board.move(c,same_num_row,t);
-                    changed=true;
+            for (int r = board.size()-2; r>=0;r-=1){
+                if (board.tile(c,r)!=null) {
+                    null_row=CheckTheNull(board,c,r);
+                    same_num_row=CheckTheSameNum(board,c,r);
+                    Tile t = board.tile(c,r);
+                    System.out.println("col is "+c+" row is "+r+"tile is "+t);
+                    System.out.println("null_row returns "+null_row);
+
+
+
+                    if (same_num_row>r && same_num_row!=row_taken){
+                        System.out.println("same_num_row returns "+same_num_row);
+                        System.out.println("row_taken is "+row_taken);
+                        score += 2*board.tile(c,same_num_row).value();
+                        board.move(c,same_num_row,t);
+                        changed=true;
+
+                        row_taken=same_num_row;
+
+                    }
+                    else if (null_row>r){
+
+                        board.move(c,null_row,t);
+                        changed=true;
+                    }
 
                 }
-                else if (null_row>r){
-                    board.move(c,null_row,t);
-                    changed=true;
-                }
+
 
                 }
             }
