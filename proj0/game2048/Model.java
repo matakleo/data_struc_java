@@ -58,6 +58,10 @@ public class Model extends Observable {
         return board.size();
     }
 
+    public static void printSide(Side s){
+        System.out.println(s);
+    }
+
     /** Return true iff the game is over (there are no moves, or
      *  there is a tile with value 2048 on the board). */
     public boolean gameOver() {
@@ -160,15 +164,32 @@ public class Model extends Observable {
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
 
+//        printSide(Side.NORTH);
+//        Side s = Side.WEST;
+
+
 
         for (int c =0; c<board.size();c+=1){
             for (int r = board.size()-2; r>=0;r-=1){
                 if (board.tile(c,r)!=null) {
+                    if (side==Side.SOUTH){
+                        System.out.println("changing perspective to south ");
+
+                        board.setViewingPerspective(Side.SOUTH);
+                    } else if (side==Side.WEST) {
+                        System.out.println("changing perspective to west ");
+                        board.setViewingPerspective(Side.WEST);
+
+                    }else if (side==Side.EAST) {
+                        System.out.println("changing perspective to east ");
+                        board.setViewingPerspective(Side.EAST);
+
+                    }
                     null_row=CheckTheNull(board,c,r);
                     same_num_row=CheckTheSameNum(board,c,r);
                     Tile t = board.tile(c,r);
                     System.out.println("col is "+c+" row is "+r+"tile is "+t);
-                    System.out.println("null_row returns "+null_row);
+//                    System.out.println("null_row returns "+null_row);
 
 
 
@@ -177,7 +198,9 @@ public class Model extends Observable {
                         System.out.println("row_taken is "+row_taken);
                         score += 2*board.tile(c,same_num_row).value();
                         board.move(c,same_num_row,t);
-                        changed=true;
+                        board.setViewingPerspective(Side.NORTH);
+
+
 
                         row_taken=same_num_row;
 
@@ -185,8 +208,12 @@ public class Model extends Observable {
                     else if (null_row>r){
 
                         board.move(c,null_row,t);
-                        changed=true;
+                        board.setViewingPerspective(Side.NORTH);
+
                     }
+                    changed=true;
+                    System.out.println("changing perspective to north ");
+
 
                 }
 
