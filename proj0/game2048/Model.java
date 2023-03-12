@@ -166,25 +166,27 @@ public class Model extends Observable {
 
 //        printSide(Side.NORTH);
 //        Side s = Side.WEST;
+        System.out.println(side);
+        if (side==Side.SOUTH){
+            System.out.println("changing perspective to south ");
+
+            board.setViewingPerspective(Side.SOUTH);
+        } else if (side==Side.WEST) {
+            System.out.println("changing perspective to west ");
+            board.setViewingPerspective(Side.WEST);
+
+        }else if (side==Side.EAST) {
+            System.out.println("changing perspective to east ");
+            board.setViewingPerspective(Side.EAST);
+
+        }
 
 
 
         for (int c =0; c<board.size();c+=1){
             for (int r = board.size()-2; r>=0;r-=1){
                 if (board.tile(c,r)!=null) {
-                    if (side==Side.SOUTH){
-                        System.out.println("changing perspective to south ");
 
-                        board.setViewingPerspective(Side.SOUTH);
-                    } else if (side==Side.WEST) {
-                        System.out.println("changing perspective to west ");
-                        board.setViewingPerspective(Side.WEST);
-
-                    }else if (side==Side.EAST) {
-                        System.out.println("changing perspective to east ");
-                        board.setViewingPerspective(Side.EAST);
-
-                    }
                     null_row=CheckTheNull(board,c,r);
                     same_num_row=CheckTheSameNum(board,c,r);
                     Tile t = board.tile(c,r);
@@ -198,7 +200,7 @@ public class Model extends Observable {
                         System.out.println("row_taken is "+row_taken);
                         score += 2*board.tile(c,same_num_row).value();
                         board.move(c,same_num_row,t);
-                        board.setViewingPerspective(Side.NORTH);
+
 
 
 
@@ -208,11 +210,11 @@ public class Model extends Observable {
                     else if (null_row>r){
 
                         board.move(c,null_row,t);
-                        board.setViewingPerspective(Side.NORTH);
+
 
                     }
-                    changed=true;
-                    System.out.println("changing perspective to north ");
+
+
 
 
                 }
@@ -220,6 +222,9 @@ public class Model extends Observable {
 
                 }
             }
+        changed=true;
+        board.setViewingPerspective(Side.NORTH);
+        System.out.println("changing perspective to north ");
 //
 //
 //
