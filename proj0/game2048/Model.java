@@ -106,6 +106,11 @@ public class Model extends Observable {
             if (board.tile(col,r)!=null){
 
                 if(board.tile(col,r).value()==board.tile(col,row).value()){
+                    for(int row_inbtw=row;row_inbtw<r;row_inbtw+=1){
+                        if (board.tile(col,row_inbtw)!=null){
+                            continue;
+                        }
+                    }
 //                    System.out.println("found same tile on row "+r);
 //                    System.out.println("moving "+board.tile(col,row)+" to "+board.tile(col,r));
                     return r;
@@ -196,10 +201,11 @@ public class Model extends Observable {
 
 
                     if (same_num_row>r && same_num_row!=row_taken){
-                        System.out.println("same_num_row returns "+same_num_row);
-                        System.out.println("row_taken is "+row_taken);
+                        System.out.println("moving "+board.tile(c,r)+" to "+c+same_num_row);
+
                         score += 2*board.tile(c,same_num_row).value();
                         board.move(c,same_num_row,t);
+                        changed=true;
 
 
 
@@ -208,8 +214,10 @@ public class Model extends Observable {
 
                     }
                     else if (null_row>r){
+                        System.out.println("moving "+board.tile(c,r)+" to "+c+null_row);
 
                         board.move(c,null_row,t);
+                        changed=true;
 
 
                     }
@@ -222,7 +230,7 @@ public class Model extends Observable {
 
                 }
             }
-        changed=true;
+
         board.setViewingPerspective(Side.NORTH);
         System.out.println("changing perspective to north ");
 //
@@ -333,18 +341,35 @@ public class Model extends Observable {
         // TODO: Fill in this function.
         for(int i=0;i<4;i+=1){
             for (int j=0;j<4;j+=1){
+
                 if (b.tile(i,j) == null){
                     return true;
                 }
                 if (j ==3){
                     continue;
                 }
-                if (b.tile(i,j).value()==b.tile(i,j+1).value()){
+                System.out.println("i is "+i+" j is "+j);
+                System.out.println("b.tile(i,j+1) is "+b.tile(i,j+1)+" b.tile(i,j) "+b.tile(i,j));
+                if (b.tile(i,j+1)==null){
+                    continue;
+                }
+                if (b.tile(i,j).value()==b.tile(i,j+1).value() ){
+
                     return true;
                 }
 
                 if (i==1 || i==2){
-                    if (b.tile(i,j).value()==b.tile(i-1,j).value() || b.tile(i,j).value()==b.tile(i+1,j).value()){
+                    if (b.tile(i-1,j)==null){
+                        continue;
+                    }
+
+                    if (b.tile(i,j).value()==b.tile(i-1,j).value()){
+                        return true;
+                    }
+                    if (b.tile(i+1,j)==null){
+                        continue;
+                    }
+                    if (b.tile(i,j).value()==b.tile(i+1,j).value()){
                         return true;
                     }
 
