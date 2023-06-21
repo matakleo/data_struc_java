@@ -75,10 +75,16 @@ public class ArrayDeque<Item> {
         System.out.println();
     }
     public Item removeFirst(){
-        if (nextFirst>2){
+
+        if (this.isEmpty()){
+            return null;
+        }
+        if (nextFirst==items.length-1 | size==items.length){
             Item x = items[0];
             items[0]=null;
             nextFirst=0;
+            size-=1;
+            return x;
         }
 
         Item x = items[nextFirst+1];
@@ -87,22 +93,35 @@ public class ArrayDeque<Item> {
 
         size-=1;
         return x;
+
     }
     public Item removeLast(){
-        System.out.println("nf "+nextFirst+"nl "+nextLast);
-        if (nextLast < 2){
-            Item x = items[size+nextLast+nextFirst];
-            size-=1;
+
+        if (this.isEmpty()){
+            return null;
+        }
+
+        if (nextLast==items.length){
             nextLast-=1;
-            items[size+nextLast+nextFirst]=null;
+        }
+
+        if (items[nextLast]!=null){
+            Item x = items[nextLast];
+            items[nextLast]=null;
+            size-=1;
             return x;
         }
-        Item x = items[nextLast-1];
 
-        items[nextLast-1]=null;
-        nextLast-=1;
-        size-=1;
-        return x;
+
+
+            Item x = items[nextLast-1];
+            items[nextLast-1]=null;
+            nextLast-=1;
+            size-=1;
+            return x;
+
+
+
 
     }
 
@@ -116,6 +135,23 @@ public class ArrayDeque<Item> {
 
     public static void main(String[] args) {
         ArrayDeque<Integer> a =new ArrayDeque<Integer>();
+        a.addFirst(2);
+        a.addFirst(3);
+        a.addFirst(37);
+//        a.addLast(57);
+        a.printDeque();
+       int b=a.removeFirst();
+        a.printDeque();
+        a.addFirst(37);
+//        a.addLast(57);
+        a.printDeque();
+        a.addFirst(47);
+        int h=a.removeFirst();
+        int c=a.removeFirst();
+        int d=a.removeFirst();
+        a.removeFirst();
+        a.addFirst(h);
+        int q=a.removeFirst();
 
     }
 }
