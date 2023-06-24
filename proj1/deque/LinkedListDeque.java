@@ -1,17 +1,17 @@
 package deque;
 
-public class LinkedListDeque<any_type> {
+public class LinkedListDeque<T> {
 
     public StuffNode sentinel;
     private int size;
     private class StuffNode{
-        public any_type item;
+        public T item;
         public StuffNode prev;
         public StuffNode next;
 
 
 
-        public StuffNode(StuffNode p, any_type i, StuffNode n) {
+        public StuffNode(StuffNode p, T i, StuffNode n) {
             prev = p;
             item = i;
             next = n;
@@ -25,12 +25,12 @@ public class LinkedListDeque<any_type> {
 
 //    public T removeFirst(): Removes and returns the item at the front of the deque. If no such item exists, returns null.
 
-    public any_type removeFirst(){
+    public T removeFirst(){
         if (sentinel.next==sentinel){
             return null;
         }
         size-=1;
-        any_type f = sentinel.next.item;
+        T f = sentinel.next.item;
         sentinel.next=sentinel.next.next;
         sentinel.next.prev=sentinel;
         return f;
@@ -38,13 +38,13 @@ public class LinkedListDeque<any_type> {
     }
 //    public T removeLast(): Removes and returns the item at the back of the deque. If no such item exists, returns null.
 
-    public any_type removeLast(){
+    public T removeLast(){
 
         if (sentinel.prev == sentinel){
             return null;
         }
         size-=1;
-        any_type l = sentinel.prev.item;
+        T l = sentinel.prev.item;
         sentinel.prev=sentinel.prev.prev;
         sentinel.prev.prev.next=sentinel;
         return l;
@@ -52,7 +52,7 @@ public class LinkedListDeque<any_type> {
     }
 //    public T get(int index): Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists, returns null. Must not alter the deque!
 
-    public any_type get(int index){
+    public T get(int index){
         size-=1;
 
         LinkedListDeque l = this;
@@ -82,11 +82,11 @@ public class LinkedListDeque<any_type> {
 
     }
 
-//    public any_type getRecursive(int index){
+//    public T getRecursive(int index){
 //        int new_size=size;
 //    }
     /**  for adding a number in one node list */
-    public LinkedListDeque(any_type x){
+    public LinkedListDeque(T x){
         size+=1;
 
 
@@ -112,7 +112,7 @@ public class LinkedListDeque<any_type> {
         }
         return true;
     }
-    public void addFirst(any_type x){
+    public void addFirst(T x){
 //        sum_size+=1;
         size+=1;
 //        if (size > 1) {
@@ -123,7 +123,7 @@ public class LinkedListDeque<any_type> {
         sentinel.next.next.prev=sentinel.next;
     }
 
-    public void addLast(any_type x){
+    public void addLast(T x){
         size+=1;
 
         sentinel.prev=new StuffNode(sentinel.prev,x,sentinel);
