@@ -1,17 +1,20 @@
 package deque;
 
-public class LinkedListDeque<any_type> {
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class LinkedListDeque<T> implements Iterable<T>,Deque<T>{
 
     public StuffNode sentinel;
     private int size;
     private class StuffNode{
-        public any_type item;
+        public T item;
         public StuffNode prev;
         public StuffNode next;
 
 
 
-        public StuffNode(StuffNode p, any_type i, StuffNode n) {
+        public StuffNode(StuffNode p, T i, StuffNode n) {
             prev = p;
             item = i;
             next = n;
@@ -19,74 +22,66 @@ public class LinkedListDeque<any_type> {
 
     }
 
+    @Override
     public int size(){
         return size;
     }
 
 //    public T removeFirst(): Removes and returns the item at the front of the deque. If no such item exists, returns null.
-
-    public any_type removeFirst(){
+@Override
+    public T removeFirst(){
         if (sentinel.next==sentinel){
             return null;
         }
         size-=1;
-        any_type f = sentinel.next.item;
+        T f = sentinel.next.item;
         sentinel.next=sentinel.next.next;
         sentinel.next.prev=sentinel;
         return f;
 
     }
 //    public T removeLast(): Removes and returns the item at the back of the deque. If no such item exists, returns null.
-
-    public any_type removeLast(){
+@Override
+    public T removeLast(){
 
         if (sentinel.prev == sentinel){
             return null;
         }
         size-=1;
-        any_type l = sentinel.prev.item;
+        T l = sentinel.prev.item;
         sentinel.prev=sentinel.prev.prev;
         sentinel.prev.prev.next=sentinel;
         return l;
 
     }
 //    public T get(int index): Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists, returns null. Must not alter the deque!
-
-    public any_type get(int index){
-        size-=1;
-
+@Override
+    public T get(int index){
+//        size-=1;
         LinkedListDeque l = this;
         if (l.isEmpty()){
             return null;
         }
-
         StuffNode to_return;
         StuffNode save_the_first;
         save_the_first=l.sentinel.next;
-//        System.out.println("before loop sentinel pointing toward"+l.sentinel.next.item);
-
         int counter = 0;
         while (counter != index){
             counter+=1;
-//            System.out.println("counter"+counter);
-
             l.sentinel.next=l.sentinel.next.next;
-//            System.out.println("sentinel pointing toward"+l.sentinel.next.item);
         }
         to_return=l.sentinel.next;
         l.sentinel.next=save_the_first;
-        to_return.prev.next=to_return.next;
-        to_return.next.prev=to_return.prev;
-
+//        to_return.prev.next=to_return.next;
+//        to_return.next.prev=to_return.prev;
         return to_return.item;
-
     }
 
-//    public any_type getRecursive(int index){
+//    public T getRecursive(int index){
 //        int new_size=size;
 //    }
     /**  for adding a number in one node list */
-    public LinkedListDeque(any_type x){
+    public LinkedListDeque(T x){
         size+=1;
 
 
@@ -105,14 +100,15 @@ public class LinkedListDeque<any_type> {
         sentinel.next=sentinel;
 
     }
-
-    public boolean isEmpty() {
-        if (sentinel.prev != sentinel) {
-            return false;
-        }
-        return true;
-    }
-    public void addFirst(any_type x){
+//    @Override
+//    public boolean isEmpty() {
+//        if (sentinel.prev != sentinel) {
+//            return false;
+//        }
+//        return true;
+//    }
+    @Override
+    public void addFirst(T x){
 //        sum_size+=1;
         size+=1;
 //        if (size > 1) {
@@ -122,8 +118,8 @@ public class LinkedListDeque<any_type> {
         sentinel.next=new StuffNode(sentinel,x,sentinel.next);
         sentinel.next.next.prev=sentinel.next;
     }
-
-    public void addLast(any_type x){
+    @Override
+    public void addLast(T x){
         size+=1;
 
         sentinel.prev=new StuffNode(sentinel.prev,x,sentinel);
@@ -135,6 +131,7 @@ public class LinkedListDeque<any_type> {
 
 
     }
+    @Override
     public void printDeque(){
         LinkedListDeque l = this;
         StuffNode save_first_node = l.sentinel.next;
@@ -149,6 +146,55 @@ public class LinkedListDeque<any_type> {
 
     }
 
+
+    /** returns an iterator (a.k.a. seer) into ME */
+
+    public Iterator<T> iterator() {
+        return new LinkedListDequeueIterator();
+    }
+
+    private class LinkedListDequeueIterator implements Iterator<T> {
+        private int wizPos;
+        public LinkedListDequeueIterator() {
+            wizPos = 0;
+        }
+        public boolean hasNext() {
+            return wizPos < size;
+        }
+        public T next() {
+            T returnItem = get(wizPos);
+            wizPos += 1;
+            return returnItem;
+        }
+    }
+
+    public boolean contains(T x) {
+        for (int i = 0; i < size; i += 1) {
+            for (T a : this) {
+                if (a.equals(x)){
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    public boolean equals(Object other) {
+
+        if (other instanceof LinkedListDeque o){
+            if (o.size()!=this.size()){
+                return false;
+            }
+            for (T item : this){
+                if (!o.contains(item)){
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
 
         LinkedListDeque<Integer> three_item_list = new LinkedListDeque<Integer>();
@@ -156,9 +202,9 @@ public class LinkedListDeque<any_type> {
         three_item_list.addFirst(99);
         three_item_list.addLast(3);
         three_item_list.printDeque();
-        int take_out = three_item_list.get(0);
-        int take_out2 = three_item_list.get(1);
-        System.out.println("from the list I take out: "+take_out+" and "+take_out2);
-        three_item_list.printDeque();
+        for (int i : three_item_list) {
+            System.out.println(i);
+        }
+//        three_item_list.printDeque();
     }
 }
